@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -73,7 +74,7 @@ export default {
         // 验证密码是否合法
         password: [
           { required: true, message: '请输入登录密码', trigger: 'blur' },
-          { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
+          { min: 6, max: 32, message: '长度在 6 到 32 个字符', trigger: 'blur' }
         ]
       },
       // 这是注册表单的验证规则对象
@@ -114,30 +115,35 @@ export default {
         this.loginForm.password = hexMd5(this.loginForm.password + KEY)
         const { data: res } = await this.$http.post('user/login', this.loginForm)
         if (!res.success) {
-          this.$message.error('用户名或者密码错误')
+          return this.$message.error('用户名或者密码错误')
         }
         this.$message.success('登录成功')
         this.$router.push('/home')
+        this.isLogined()
       })
     },
     register() {
-      // 对密码进行加密传输
-      // eslint-disable-next-line no-undef
-      this.registerForm.password = hexMd5(this.registerForm.password + KEY)
-      // eslint-disable-next-line no-undef
-      this.registerForm.rePassword = hexMd5(this.registerForm.rePassword + KEY)
       this.$refs.registerFormRef.validate(async valid => {
         if (!valid) return
+        // 对密码进行加密传输
+        // eslint-disable-next-line no-undef
+        this.registerForm.password = hexMd5(this.registerForm.password + KEY)
+        // eslint-disable-next-line no-undef
+        this.registerForm.rePassword = hexMd5(this.registerForm.rePassword + KEY)
         const { data: res } = await this.$http.post('user/register', this.registerForm)
         if (!res.success) {
-          this.$message.error('注册失败,用户名已经存')
           this.$refs.registerFormRef.resetFields()
+          return this.$message.error('注册失败,用户名已经存')
         }
         this.$message.success('注册成功')
         this.registerVisible = false
-        console.log(res)
       })
-    }
+    },
+    ...mapMutations(['isLogined', 'noLogin'])
+  },
+  computed: {
+    // eslint-disable-next-line dot-notation
+    ...mapState['isLogin']
   }
 }
 </script>
