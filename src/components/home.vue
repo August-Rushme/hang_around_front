@@ -4,7 +4,7 @@
     <el-container class="home_container">
       <el-header>
         <div>
-          <span>闲转</span>
+          <span>闲转-毕业物品销售平台</span>
         </div>
         <el-button type="info" v-if="this.isLogin" @click="logout">退出登录</el-button>
         <el-button type="info" @click="login" v-else>登录</el-button>
@@ -57,12 +57,12 @@ export default {
         },
         {
           id: 3,
-          authName: '商品首页',
+          authName: '我的收藏',
           path: '3store'
         },
         {
           id: 4,
-          authName: '个人中心',
+          authName: '商品发布',
           path: '4user'
         }
       ],
@@ -144,7 +144,7 @@ export default {
   }
 }
 .el-main {
-  background-color: #eaedf1;
+  background-color: #f5f5f5;
 }
 .iconfont {
   margin-right: 10px;

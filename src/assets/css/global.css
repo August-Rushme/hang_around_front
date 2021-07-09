@@ -14,4 +14,6 @@ body,
   width: 1200px;
   margin: auto;
 }
-
+.goods-card:hover {
+  border: 1px solid #ff4400 !important;
+}
