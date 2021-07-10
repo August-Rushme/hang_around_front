@@ -4,7 +4,7 @@
     <el-container class="home_container">
       <el-header>
         <div>
-          <span>闲转-毕业物品销售平台</span>
+          <span class="webname">闲转</span>
         </div>
         <el-button type="info" v-if="this.isLogin" @click="logout">退出登录</el-button>
         <el-button type="info" @click="login" v-else>登录</el-button>
@@ -15,6 +15,7 @@
         <el-aside :width="isCollapse ? '64px' : '200px'">
           <div class="toggle_button" @click="toggleCollapse">|||</div>
           <!-- 侧边栏菜单 -->
+          <!-- #333744 -->
           <el-menu background-color="#333744" active-text-color="#409EFF" text-color="#fff" unique-opened :collapse="isCollapse" :collapse-transition="false" router :default-active="activePath">
             <!-- 菜单选项 -->
             <el-menu-item v-for="item in menuList" :key="item.id" :index="'/' + item.path + ''" @click="saveNavState('/' + item.path)">
@@ -62,8 +63,8 @@ export default {
         },
         {
           id: 4,
-          authName: '商品发布',
-          path: '4user'
+          authName: '商品管理',
+          path: 'goods'
         }
       ],
       iconsObject: {
@@ -102,6 +103,11 @@ export default {
     saveNavState(activePath) {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath
+      window.sessionStorage.getItem('activePath')
+      if (!this.isLogin && this.activePath === '/user') {
+        this.$router.push('/login')
+        this.$message.info('请先登陆！')
+      }
     },
     // 全局方法
     ...mapMutations(['isLogined', 'noLogin'])
@@ -119,6 +125,9 @@ export default {
 <style lang="less" scoped>
 .home_container {
   height: 100%;
+  .webname {
+    font-size: 20px;
+  }
 }
 .el-header {
   background-color: #373d41;
@@ -155,7 +164,7 @@ export default {
   font-size: 12px;
   color: #fff;
   letter-spacing: 0.2em;
-  background-color: #4a5056;
+  background-color: #333744;
   cursor: pointer;
 }
 </style>

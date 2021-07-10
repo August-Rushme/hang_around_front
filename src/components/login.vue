@@ -117,8 +117,9 @@ export default {
         if (!res.success) {
           return this.$message.error('用户名或者密码错误')
         }
+        window.sessionStorage.setItem('userId', res.data.id)
         this.$message.success('登录成功')
-        this.$router.push('/home')
+        this.$router.push('/user')
         this.isLogined()
       })
     },

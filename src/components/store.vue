@@ -26,10 +26,10 @@
           <el-col :span="6" v-for="item in goodsList" :key="item.id">
             <div class="goods_item">
               <el-card class="goods_card">
-                <a href="javascript:;" class="goods_card1"> <img :src="require('../' + item.imgSrc)" alt="" /> </a>
+                <a href="javascript:;" class="goods_card1"> <img :src="require('../' + item.imgSrc)" alt="" @click="goGoodsInfo(item.id)" /> </a>
 
                 <div class="price">
-                  <span>￥39.9</span>
+                  <span>{{ '￥' + item.price }}</span>
                 </div>
                 <el-row>
                   <el-col>
@@ -60,6 +60,7 @@
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -89,6 +90,7 @@ export default {
         return this.$message.error('获取商品数据失败！')
       }
       this.goodsList = res.data.list
+      this.total = res.data.total
       console.log(this.goodsList)
     },
     // 获取商品的数据
@@ -108,13 +110,23 @@ export default {
     handleCurrentChange(newPage) {
       this.queryInfo.pageNum = newPage
       this.getGoodsList()
+    },
+    // eslint-disable-next-line dot-notation
+    ...mapMutations(['currentId']),
+    // 前往商品的详情页
+    goGoodsInfo(id) {
+      this.currentId(id)
+      this.$router.push('/store/goodsInfo')
     }
   },
   // 获取商品的数据
   created() {
     this.getGoodsList()
   },
-  computed: {}
+  computed: {
+    // eslint-disable-next-line dot-notation
+    ...mapState(['goodsId'])
+  }
 }
 </script>
 <style lang="less" scoped>
