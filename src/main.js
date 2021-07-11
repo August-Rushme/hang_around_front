@@ -13,6 +13,11 @@ import './assets/css/global.css'
 // 导入进度条
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+// 富文本
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css' // import styles
+import 'quill/dist/quill.snow.css' // for snow theme
+import 'quill/dist/quill.bubble.css' // for bubble theme
 // 配置请求的跟路径
 axios.defaults.baseURL = 'http://127.0.0.1:8081/api/v1/'
 // 配置请求拦截器(打印日志等)
@@ -39,6 +44,7 @@ axios.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+Vue.use(VueQuillEditor)
 Vue.use(ElementUI)
 Vue.prototype.$http = axios
 Vue.config.productionTip = false

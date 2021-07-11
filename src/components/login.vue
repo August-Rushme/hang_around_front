@@ -1,28 +1,30 @@
 <template>
   <div class="login_container">
-    <div class="login_box">
-      <!-- 头像区域 -->
+    <div class="center">
+      <div class="login_box">
+        <!-- 头像区域 -->
 
-      <div class="avatar_box">
-        <img src="../assets/logo.png" alt="" />
+        <div class="avatar_box">
+          <img src="../assets/logo.png" alt="" />
+        </div>
+        <!-- 登录表单区域 -->
+        <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form">
+          <!-- 用户名 -->
+          <el-form-item prop="username">
+            <el-input v-model="loginForm.username" prefix-icon="iconfont iconyonghu"></el-input>
+          </el-form-item>
+          <!-- 密码 -->
+          <el-form-item prop="password">
+            <el-input v-model="loginForm.password" prefix-icon="iconfont iconicon-mima" type="password"></el-input>
+          </el-form-item>
+          <!-- 按钮区域 -->
+          <el-form-item class="btns">
+            <el-button type="primary" @click="login">登录</el-button>
+
+            <el-button type="info" @click="showRegister">注册</el-button>
+          </el-form-item>
+        </el-form>
       </div>
-      <!-- 登录表单区域 -->
-      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form">
-        <!-- 用户名 -->
-        <el-form-item prop="username">
-          <el-input v-model="loginForm.username" prefix-icon="iconfont iconyonghu"></el-input>
-        </el-form-item>
-        <!-- 密码 -->
-        <el-form-item prop="password">
-          <el-input v-model="loginForm.password" prefix-icon="iconfont iconicon-mima" type="password"></el-input>
-        </el-form-item>
-        <!-- 按钮区域 -->
-        <el-form-item class="btns">
-          <el-button type="primary" @click="login">登录</el-button>
-
-          <el-button type="info" @click="showRegister">注册</el-button>
-        </el-form-item>
-      </el-form>
     </div>
     <!-- 点击注册 -->
     <el-dialog title="注册" :visible.sync="registerVisible" width="40%" @close="clearRegisterForm">
@@ -119,7 +121,7 @@ export default {
         }
         window.sessionStorage.setItem('userId', res.data.id)
         this.$message.success('登录成功')
-        this.$router.push('/user')
+        this.$router.push('/home')
         this.isLogined()
       })
     },
@@ -145,14 +147,24 @@ export default {
   computed: {
     // eslint-disable-next-line dot-notation
     ...mapState['isLogin']
+  },
+  created() {
+    window.sessionStorage.setItem('isLogined', false)
   }
 }
 </script>
 
 <style lang="less" scoped>
 .login_container {
-  background-color: #2b4b6b;
+  // background-color: #2b4b6b;
   height: 100%;
+  .center {
+    background-size: cover;
+    background-image: url('../assets/background.png');
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 740px;
+  }
 }
 
 .login_box {

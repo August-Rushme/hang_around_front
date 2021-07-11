@@ -4,7 +4,7 @@
     <el-container class="home_container">
       <el-header>
         <div>
-          <span class="webname">闲转</span>
+          <img src="../assets/logo2.png" alt=""  />
         </div>
         <el-button type="info" v-if="this.isLogin" @click="logout">退出登录</el-button>
         <el-button type="info" @click="login" v-else>登录</el-button>
@@ -15,8 +15,8 @@
         <el-aside :width="isCollapse ? '64px' : '200px'">
           <div class="toggle_button" @click="toggleCollapse">|||</div>
           <!-- 侧边栏菜单 -->
-          <!-- #333744 -->
-          <el-menu background-color="#333744" active-text-color="#409EFF" text-color="#fff" unique-opened :collapse="isCollapse" :collapse-transition="false" router :default-active="activePath">
+          <!-- #242424 -->
+          <el-menu background-color="#242424" active-text-color="#409EFF" text-color="#fff" unique-opened :collapse="isCollapse" :collapse-transition="false" router :default-active="activePath">
             <!-- 菜单选项 -->
             <el-menu-item v-for="item in menuList" :key="item.id" :index="'/' + item.path + ''" @click="saveNavState('/' + item.path)">
               <!-- 图标 -->
@@ -130,7 +130,7 @@ export default {
   }
 }
 .el-header {
-  background-color: #373d41;
+  background-color: #c20c0c;
   display: flex;
   justify-content: space-between;
   padding-left: 0;
@@ -141,13 +141,14 @@ export default {
   > div {
     display: flex;
     align-items: center;
-    span {
-      margin-left: 15px;
+    img {
+      margin-left: -20px;
+      margin-bottom: 10px;
     }
   }
 }
 .el-aside {
-  background-color: #333744;
+  background-color: #242424;
   .el-menu {
     border-right: 0;
   }
@@ -164,7 +165,7 @@ export default {
   font-size: 12px;
   color: #fff;
   letter-spacing: 0.2em;
-  background-color: #333744;
+  background-color: #242424;
   cursor: pointer;
 }
 </style>

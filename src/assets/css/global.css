@@ -17,3 +17,6 @@ body,
 .goods-card:hover {
   border: 1px solid #ff4400 !important;
 }
+.ql-editor {
+  min-height: 300px;
+}

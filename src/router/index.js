@@ -5,6 +5,8 @@ import Home from '../components/home.vue'
 import Store from '../components/store.vue'
 import GoodsInfo from '../components/goodsInfo.vue'
 import User from '../components/user.vue'
+import Goods from '../components/goods.vue'
+import AddGood from '../components/addGoods.vue'
 
 Vue.use(VueRouter)
 
@@ -24,7 +26,9 @@ const routes = [
     children: [
       { path: '/store', component: Store },
       { path: '/store/goodsInfo', component: GoodsInfo },
-      { path: '/user', component: User }
+      { path: '/user', component: User },
+      { path: '/goods', component: Goods },
+      { path: '/goods/add', component: AddGood }
     ]
   }
 ]

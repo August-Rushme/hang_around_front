@@ -14,8 +14,8 @@
       <div class="productRotationChart">
         <template>
           <el-carousel :interval="4000" arrow="always">
-            <el-carousel-item v-for="item in 4" :key="item">
-              <h3>{{ item }}</h3>
+            <el-carousel-item v-for="item in bannerList" :key="item">
+              <h3><img :src="item" alt="" width="100%" /></h3>
             </el-carousel-item>
           </el-carousel>
         </template>
@@ -25,8 +25,8 @@
         <el-row>
           <el-col :span="6" v-for="item in goodsList" :key="item.id">
             <div class="goods_item">
-              <el-card class="goods_card">
-                <a href="javascript:;" class="goods_card1"> <img :src="require('../' + item.imgSrc)" alt="" @click="goGoodsInfo(item.id)" /> </a>
+              <el-card class="goods_card" height="305px">
+                <a href="javascript:;" class="goods_card1"> <img :src="item.imgSrc" alt="图片加载失败！" @click="goGoodsInfo(item.id)" width="100%" class="goods_img" /> </a>
 
                 <div class="price">
                   <span>{{ '￥' + item.price }}</span>
@@ -75,7 +75,12 @@ export default {
       // 商品数量
       total: 0,
       // 轮播图列表
-      bannerList: [],
+      bannerList: [
+        'https://www.lynnmfg.com/wp-content/uploads/2015/09/banner-1200x300.png',
+        'https://i0.wp.com/www.mamili1910.de/wp-content/uploads/2019/02/Banner-1200-300.png?ssl=1',
+        'https://www.onetenth.co.jp/wp/wp-content/uploads/2020/06/logo_1200_300.jpg',
+        'https://www.robinwoodpark.org/wp-content/uploads/2015/02/cropped-clear_1200-300.jpg'
+      ],
       // 商品列表
       goodsList: []
     }
@@ -159,7 +164,9 @@ export default {
       margin-top: 15px;
       margin-right: 20px;
       img {
-        width: 100%;
+        width: 305px;
+        height: 305px;
+        overflow: hidden;
       }
       .price span {
         color: #ff4400;

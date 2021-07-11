@@ -7,7 +7,7 @@
       <div class="block">
         <el-carousel trigger="click" height="500px" :interval="5000" arrow="hover" indicator-position="outside">
           <el-carousel-item v-for="item in img_goods" :key="item.id">
-            <img :src="require('../' + item.src)" alt="" width="100%" />
+            <img :src="item.src" alt="图片加载失败！" width="100%" />
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -52,14 +52,13 @@
         </div>
         <div class="headSubtitle">其他产品</div>
         <div class="subContainer">
-          <div class="subcontent" v-for="(item, index) in 4" :key="index">
-            <img
-              src="https://ccdn.goodq.top/caches/43a247f860498dd0ec3180f40e28051f/aHR0cHM6Ly81ZDc4Y2NjYzVjMWQ4LnQ3NC5xaWZlaXllLmNvbS9xZnktY29udGVudC91cGxvYWRzLzIwMTkvMDkvYzA5NjI0ZGVkYTgyMDgxNGQ3MjU1ZGQ5ZjNhNDdiYzEtMzAweDQwMC05MC53ZWJw.webp"
-              alt=""
-              height="400px"
-              width="270px"
-            />
-            <div class="productionName"><a href="">木质简约小茶几</a></div>
+          <div class="subcontent" v-for="item in goodsList" :key="item.id">
+            <el-card class="goods_card ">
+              <img :src="item.imgSrc" alt="图片加载失败！" width="100%" class="other_img" />
+              <div class="productionName">
+                <a href="javascript:;">{{ item.name }}</a>
+              </div>
+            </el-card>
           </div>
         </div>
       </div></el-card
@@ -71,6 +70,14 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
+      queryInfo: {
+        // 查询的关键字
+        query: '',
+        // 当前每页显示多少条数据
+        pageSize: 4,
+        // 当前页
+        pageNum: 1
+      },
       query: {
         id: 0
       },
@@ -137,7 +144,9 @@ export default {
           name: '售后与保障',
           content: ''
         }
-      ]
+      ],
+      // 商品列表
+      goodsList: []
     }
   },
   methods: {
@@ -194,6 +203,15 @@ export default {
       this.giveValue()
       console.log(this.goods_Info)
     },
+    async getGoodsImg() {
+      this.queryInfo.pageNum = Math.ceil(Math.random() * 10)
+      const { data: res } = await this.$http.get('/goods/goodsInfo', { params: this.queryInfo })
+      if (!res.success) {
+        return this.$message.error('获取商品数据失败！')
+      }
+      this.goodsList = res.data.list
+      console.log(this.goodsList)
+    },
     giveValue() {
       this.pannelInfo.forEach(item => {
         item.content = this.goods_Info.others
@@ -214,6 +232,7 @@ export default {
 
   created() {
     this.getGoodsInfo()
+    this.getGoodsImg()
   }
 }
 </script>
@@ -402,7 +421,7 @@ export default {
 }
 .productionName {
   display: block;
-  width: 270px;
+  width: 100%;
   height: 60px;
 }
 .productionName a {
@@ -414,8 +433,7 @@ export default {
   text-decoration: none;
 }
 .subContainer {
-  margin-left: 40px;
-  width: 1200px;
+  width: 100%;
   height: 500px;
 }
 .productionName a:hover {
@@ -425,5 +443,15 @@ export default {
   transform: scale(1.1);
   opacity: 0.8;
   background-color: #f5f5f5;
+}
+.goods_card {
+  width: 270px;
+  margin-top: 15px;
+  margin-right: 5px;
+  text-align: center;
+  img {
+    width: 100%;
+    height: 305px;
+  }
 }
 </style>
