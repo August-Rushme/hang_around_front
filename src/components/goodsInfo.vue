@@ -1,13 +1,20 @@
 /* eslint-disable quote-props */
 <template>
   <div>
+    <div style="width:100%;height:30px;">
+      <!-- 面包屑导航 -->
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>商品详情页</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <el-card
       ><div class="back"><a href="javascript:;" @click="goback">← 返 回</a></div>
       <!-- 商品图片轮播页 -->
       <div class="block">
         <el-carousel trigger="click" height="500px" :interval="5000" arrow="hover" indicator-position="outside">
           <el-carousel-item v-for="item in img_goods" :key="item.id">
-            <img :src="item.src" alt="图片加载失败！" width="100%" />
+            <img :src="item.src" alt="图片加载失败！" width="100%" height="100%" />
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -15,7 +22,7 @@
       <div class="goodsInfo">
         <div class="headerTitle">
           {{ goods_Info.name }}
-          <i class="el-icon-star-on" :class="{ flag }" @click="onColorChange"> </i>
+          <i class="el-icon-star-on" :class="{ flag }" @click="collectionGood"> </i>
           <span class="icontext">收藏</span>
           <span class="price">￥{{ goods_Info.price }}.00</span>
           <span class="description">{{ goods_Info.others }}</span>
@@ -27,8 +34,42 @@
           <span v-if="(id = 3)">{{ item.tab }}</span>
         </div>
         <div class="contactButton">
-          <button class="contact">立即咨询</button>
-          <button class="contact">联系我们</button>
+          <button class="contact" @click="dialogTableVisible2 = true">立即咨询</button>
+          <button class="contact" @click="dialogTableVisible = true">联系我们</button>
+          <el-dialog width="20%" :visible.sync="dialogTableVisible">
+            <div class="contactWay">
+              <img src="https://img.ixintu.com/upload/jpg/20210524/6a5e92a8b7ef7be39658354b68beaddb_8270_212_161.jpg!con" width="25px" alt="" />
+              <span class="contactText">联系客服微信</span>
+            </div>
+            <img
+              style="margin-left:76px;margin-top:20px;"
+              src="https://qr.api.cli.im/newqr/create?data=%25E9%2597%25B2%25E8%25BD%25AC&level=H&transparent=false&bgcolor=%23FFFFFF&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&logoshape=no&size=260&kid=cliim&key=9eaa2c27514b9e9e583203a715d1b1f0"
+              alt=""
+              width="120px"
+            />
+            <div class="contactWay">
+              <img src="https://img.51miz.com/Element/00/78/10/97/26bf4a88_E781097_74aeb831.png" width="25px" alt="" />
+              <span class="contactText">服务热线</span>
+            </div>
+            <div class="phoneNumber">闲转：950189</div>
+          </el-dialog>
+          <el-dialog width="20%" :visible.sync="dialogTableVisible2">
+            <div class="contactWay">
+              <img src="https://img.ixintu.com/upload/jpg/20210524/6a5e92a8b7ef7be39658354b68beaddb_8270_212_161.jpg!con" width="25px" alt="" />
+              <span class="contactText">联系卖家微信</span>
+            </div>
+            <img
+              style="margin-left:76px;margin-top:20px;"
+              src="https://qr.api.cli.im/newqr/create?data=%25E9%2597%25B2%25E8%25BD%25AC&level=H&transparent=false&bgcolor=%23FFFFFF&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&logoshape=no&size=260&kid=cliim&key=9eaa2c27514b9e9e583203a715d1b1f0"
+              alt=""
+              width="120px"
+            />
+            <div class="contactWay">
+              <img src="https://img.51miz.com/Element/00/78/10/97/26bf4a88_E781097_74aeb831.png" width="25px" alt="" />
+              <span class="contactText">联系卖家</span>
+            </div>
+            <div class="phoneNumber">联系电话：16875986796</div>
+          </el-dialog>
         </div>
         <div v-for="item in pannelInfo" :key="item.id">
           <div class="pannel" @click="contentexpand(item.id)">
@@ -54,10 +95,12 @@
         <div class="subContainer">
           <div class="subcontent" v-for="item in goodsList" :key="item.id">
             <el-card class="goods_card ">
-              <img :src="item.imgSrc" alt="图片加载失败！" width="100%" class="other_img" />
-              <div class="productionName">
-                <a href="javascript:;">{{ item.name }}</a>
-              </div>
+              <a href="javascript:;" @click="goDetail(item.id)" class="othergoods">
+                <img :src="item.imgSrc" alt="图片加载失败！" width="100%" class="other_img" />
+                <div class="productionName">
+                  {{ item.name }}
+                </div>
+              </a>
             </el-card>
           </div>
         </div>
@@ -66,7 +109,7 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -97,6 +140,8 @@ export default {
       zero: 0,
       // 被激活的链接
       activePath: '',
+      dialogTableVisible: false,
+      dialogTableVisible2: false,
       img_goods: [
         {
           id: 1,
@@ -146,7 +191,20 @@ export default {
         }
       ],
       // 商品列表
-      goodsList: []
+      goodsList: [],
+      collectionObj: {
+        color: '',
+        id: '',
+        imgSrc: '',
+        name: '',
+        old: '',
+        others: '',
+        price: '',
+        range: '',
+        type: '',
+        use: '',
+        uid: 0
+      }
     }
   },
   methods: {
@@ -193,7 +251,9 @@ export default {
       }
       this.frontnumber = this.clicknumber
     },
+    // 获取商品的详细信息
     async getGoodsInfo() {
+      this.flag = false
       this.query.id = this.goodsId
       const { data: res } = await this.$http.get('/goods/goodsInfoDesc', { params: this.query })
       if (!res.success) {
@@ -203,6 +263,7 @@ export default {
       this.giveValue()
       console.log(this.goods_Info)
     },
+    // 获取商品的图片
     async getGoodsImg() {
       this.queryInfo.pageNum = Math.ceil(Math.random() * 10)
       const { data: res } = await this.$http.get('/goods/goodsInfo', { params: this.queryInfo })
@@ -212,6 +273,7 @@ export default {
       this.goodsList = res.data.list
       console.log(this.goodsList)
     },
+    // 渲染商品的信息
     giveValue() {
       this.pannelInfo.forEach(item => {
         item.content = this.goods_Info.others
@@ -224,6 +286,24 @@ export default {
       this.labelInfo[0].number = this.goods_Info.id
       this.labelInfo[1].type = this.goods_Info.type
       this.labelInfo[2].tab = this.goods_Info.range
+    },
+    // eslint-disable-next-line dot-notation
+    ...mapMutations(['currentId']),
+    // 前往到其他物品的详细页面
+    goDetail(id) {
+      this.currentId(id)
+      this.getGoodsInfo()
+      this.getGoodsImg()
+    },
+    // 点击收藏
+    async collectionGood() {
+      this.collectionObj = this.goods_Info
+      this.collectionObj.uid = window.sessionStorage.getItem('userId')
+      const { data: res } = await this.$http.post('/goods/collection', this.collectionObj)
+      if (!res.success) return this.$message.error('收藏失败！')
+      this.$message.success('收藏成功！')
+      this.onColorChange()
+      console.log(res)
     }
   },
   computed: {
@@ -424,7 +504,7 @@ export default {
   width: 100%;
   height: 60px;
 }
-.productionName a {
+.othergoods {
   display: block;
   text-align: center;
   color: #5e5e5e;
@@ -453,5 +533,23 @@ export default {
     width: 100%;
     height: 305px;
   }
+}
+.contactWay {
+  margin-left: 80px;
+  margin-top: 20px;
+}
+.contactWay span {
+  margin-left: 5px;
+  font-size: 13px;
+}
+.contactWay img {
+  vertical-align: middle;
+}
+.phoneNumber {
+  width: 100%;
+  margin-top: 20px;
+  font-weight: 400px;
+  color: #000;
+  text-align: center;
 }
 </style>

@@ -19,12 +19,11 @@ import {
   Dialog,
   MessageBox,
   Tag,
-  Tree,
-  Select,
   Alert,
   Upload,
   Carousel,
-  CarouselItem
+  CarouselItem,
+  Image
 } from 'element-ui'
 
 Vue.use(Button)
@@ -44,11 +43,10 @@ Vue.use(Col)
 Vue.use(Pagination)
 Vue.use(Dialog)
 Vue.use(Tag)
-Vue.use(Tree)
-Vue.use(Select)
 Vue.use(Alert)
 Vue.use(Upload)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
+Vue.use(Image)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

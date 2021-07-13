@@ -1,14 +1,22 @@
 <template>
   <div>
+    <div style="width:100%;height:30px;">
+      <!-- 面包屑导航 -->
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>个人中心</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <el-card
       >欢迎您, <span class="userName">{{ userInfo.username }}</span> ! 您上次登录的地点为： 海南
       <el-card class="userDetail"
         ><span class="symbol">|</span>资料管理
         <hr style="height:1px;border:none;border-top:1px dashed gray;margin-top:10px;" />
         <!-- 头像区域 -->
+        <input type="file" accept="image/*" @change="handleFile" class="hiddenInput" />
         <div class="avatar">
-          <img src="https://tse2-mm.cn.bing.net/th/id/OIP-C.rBVkJaYBCOkM0HZULRGgNAHaHa?w=205&h=206&c=7&o=5&dpr=1.25&pid=1.7" width="100px" height="100px" />
-          <a href="javascript:;" class="changeAvatar">更换头像</a>
+          <img class="userAvatarImg" :src="userAvatar.avatar" @click="getCurrentURL" />
+          <a href="javascript:;" class="changeAvatar" @click.stop="uploadHeadImg">更换头像</a>
         </div>
         <br />
         <!-- 用户信息 -->
@@ -29,7 +37,7 @@
           </el-form-item>
 
           <el-form-item label="倾向:" prop="type">
-            <el-checkbox-group v-model="userForm.type">
+            <el-checkbox-group v-model="userForm.type" v-if="true">
               <el-checkbox label="手机" name="type"></el-checkbox>
               <el-checkbox label="数码" name="type"></el-checkbox>
               <el-checkbox label="电器" name="type"></el-checkbox>
@@ -61,6 +69,10 @@
 export default {
   data() {
     return {
+      srcList: ['https://tse2-mm.cn.bing.net/th/id/OIP-C.rBVkJaYBCOkM0HZULRGgNAHaHa?w=205&h=206&c=7&o=5&dpr=1.25&pid=1.7', 'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'],
+      userAvatar: {
+        avatar: 'https://tse2-mm.cn.bing.net/th/id/OIP-C.rBVkJaYBCOkM0HZULRGgNAHaHa?w=205&h=206&c=7&o=5&dpr=1.25&pid=1.7'
+      },
       query: {
         id: 0
       },
@@ -69,7 +81,7 @@ export default {
         id: 0,
         name: '',
         birthday: '',
-        type: [],
+        type: [''],
         password: null,
         sex: '',
         signature: ''
@@ -117,6 +129,27 @@ export default {
     }
   },
   methods: {
+    getCurrentURL() {
+      this.srcList[0] = this.userAvatar.avatar
+    },
+    expandImg() {
+      this.imgFlag = true
+    },
+    // 打开图片上传
+    uploadHeadImg() {
+      this.$el.querySelector('.hiddenInput').click()
+    },
+    // 将头像显示
+    handleFile(e) {
+      let $target = e.target || e.srcElement
+      let file = $target.files[0]
+      var reader = new FileReader()
+      reader.onload = data => {
+        let res = data.target || data.srcElement
+        this.userAvatar.avatar = res.result
+      }
+      reader.readAsDataURL(file)
+    },
     // 点击修改信息
     changeNow() {
       this.$refs.formRef.validate(async valid => {
@@ -131,6 +164,7 @@ export default {
           return this.$message.error('修改个人信息失败！')
         }
         this.$message.success('修改个人信息修改成功！')
+        this.getUserInfo()
       })
     },
     // 表单重置
@@ -152,9 +186,12 @@ export default {
       this.userForm.birthday = this.userInfo.birthday
       this.userForm.sex = this.userInfo.sex
       this.userForm.signature = this.userInfo.signature
+
+      console.log(this.userForm.type[0])
     }
   },
   created() {
+    this.activePath = window.sessionStorage.getItem('activePath')
     this.userForm.id = window.sessionStorage.getItem('userId')
     this.query.id = window.sessionStorage.getItem('userId')
     this.getUserInfo()
@@ -162,12 +199,13 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-* {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border: 0;
-  text-decoration: none;
+.hiddenInput {
+  display: none;
+}
+.caption {
+  color: #8f8f8f;
+  font-size: 26px;
+  height: 37px;
 }
 .userName {
   color: red;
@@ -185,11 +223,18 @@ export default {
 .avatar {
   margin-top: 28px;
   margin-left: 10px;
+  .userAvatarImg {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    border-radius: 50%;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
-.avatar img {
-  cursor: pointer;
-  border-radius: 50%;
-}
+
 .changeAvatar {
   display: block;
   font-size: 12px;

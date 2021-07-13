@@ -1,5 +1,12 @@
 <template>
   <div>
+     <div style="width:100%;height:30px;">
+      <!-- 面包屑导航 -->
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <el-card>
       <!-- 搜索区域 -->
       <el-row :gutter="20">
@@ -37,7 +44,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="queryInfo.pageNum"
-        :page-sizes="[4, 8, 12, 16]"
+        :page-sizes="[4, 6, 8, 10]"
         :page-size="queryInfo.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"

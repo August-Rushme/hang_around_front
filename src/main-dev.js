@@ -25,6 +25,8 @@ axios.defaults.baseURL = 'http://127.0.0.1:8081/api/v1/'
 axios.interceptors.request.use(
   config => {
     NProgress.start()
+    // 为请求头对象，添加Token验证的token字段
+    config.headers.token = window.sessionStorage.getItem('token')
     console.log('请求参数：', config)
     return config
   },

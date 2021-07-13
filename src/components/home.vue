@@ -4,7 +4,7 @@
     <el-container class="home_container">
       <el-header>
         <div>
-          <img src="../assets/logo2.png" alt=""  />
+          <img src="../assets/logo2.png" alt="" />
         </div>
         <el-button type="info" v-if="this.isLogin" @click="logout">退出登录</el-button>
         <el-button type="info" @click="login" v-else>登录</el-button>
@@ -59,7 +59,7 @@ export default {
         {
           id: 3,
           authName: '我的收藏',
-          path: '3store'
+          path: 'collection'
         },
         {
           id: 4,
@@ -82,7 +82,8 @@ export default {
       // 默认不折叠
       isCollapse: false,
       // 被激活的链接
-      activePath: ''
+      activePath: '',
+      token: ''
     }
   },
   methods: {
@@ -91,9 +92,11 @@ export default {
       this.isLogined()
     },
     logout() {
+      // 退出登陆后清空后端的token，并且清除sessionStorage里面的东西
+      this.$http.get('/user/logout/' + this.token)
       this.noLogin()
       this.$router.push('/login')
-      console.log(this.isLogin)
+      window.sessionStorage.clear()
     },
     // 是否折叠
     toggleCollapse() {
@@ -119,6 +122,7 @@ export default {
   // 激活的菜单
   created() {
     this.activePath = window.sessionStorage.getItem('activePath')
+    this.token = window.sessionStorage.getItem('token')
   }
 }
 </script>

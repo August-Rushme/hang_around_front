@@ -35,7 +35,7 @@
                   <el-col>
                     <div class="gooods_item_bottom">
                       <span>{{ item.name + item.type }}</span>
-                      <el-button type="primary" class="button" size="mini">立即收藏</el-button>
+                      <el-button type="primary" class="button" size="mini" @click="collectionGood(item)">立即收藏</el-button>
                     </div>
                   </el-col>
                 </el-row>
@@ -82,7 +82,21 @@ export default {
         'https://www.robinwoodpark.org/wp-content/uploads/2015/02/cropped-clear_1200-300.jpg'
       ],
       // 商品列表
-      goodsList: []
+      goodsList: [],
+      // 收藏信息
+      collectionObj: {
+        color: '',
+        id: '',
+        imgSrc: '',
+        name: '',
+        old: '',
+        others: '',
+        price: '',
+        range: '',
+        type: '',
+        use: '',
+        uid: 0
+      }
     }
   },
   methods: {
@@ -122,6 +136,15 @@ export default {
     goGoodsInfo(id) {
       this.currentId(id)
       this.$router.push('/store/goodsInfo')
+    },
+    // 点击收藏
+    async collectionGood(item) {
+      this.collectionObj = item
+      this.collectionObj.uid = window.sessionStorage.getItem('userId')
+      const { data: res } = await this.$http.post('/goods/collection', this.collectionObj)
+      if (!res.success) return this.$message.error('收藏失败！')
+      this.$message.success('收藏成功！')
+      console.log(res)
     }
   },
   // 获取商品的数据
